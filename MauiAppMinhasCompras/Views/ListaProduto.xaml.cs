@@ -1,5 +1,6 @@
 using MauiAppMinhasCompras.Models;
 using System.Collections.ObjectModel;
+using System.Windows.Input;
 namespace MauiAppMinhasCompras.Views;
 
 
@@ -135,4 +136,42 @@ public partial class ListaProduto : ContentPage
             lst_produtos.IsRefreshing = false;
         }
     }
+    public List<string> Categorias { get; } = new()
+{
+    "Todas",
+    "Alimentos",
+    "Higiene",
+    "Limpeza",
+    "Outros"
+};
+
+    private string categoriaSelecionada = "Todas";
+    public string CategoriaSelecionada
+    {
+        get => categoriaSelecionada;
+        set
+        {
+            categoriaSelecionada = value;
+            OnPropertyChanged();
+            FiltrarProdutos();
+        }
+    }
+
+    private void FiltrarProdutos()
+    {
+        if (CategoriaSelecionada == "Todas")
+        {
+            lst_produtos = new ObservableCollection<Produto>(todosProdutos);
+        }
+        else
+        {
+            lst_produtos = new ObservableCollection<Produto>(
+                todosProdutos.Where(p => p.Categoria == CategoriaSelecionada));
+        }
+    }
+    public ICommand AbrirRelatorioCommand => new Command(async () =>
+    {
+        await Shell.Current.GoToAsync(nameof(RelatorioCategorias));
+    });
+
 }

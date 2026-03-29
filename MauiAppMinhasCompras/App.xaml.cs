@@ -34,4 +34,5 @@ namespace MauiAppMinhasCompras
             MainPage = new NavigationPage(new Views.ListaProduto());
         }
     }
+    Routing.RegisterRoute(nameof(RelatorioCategorias), typeof(RelatorioCategorias));
 }

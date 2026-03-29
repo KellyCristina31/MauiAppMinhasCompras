@@ -24,6 +24,10 @@
                    Placeholder="Busca de Produtos"
                    TextChanged="txt_search_TextChanged"/>
         <Frame  Padding="0" Margin="10" VerticalOptions="FillAndExpand">
+          <Picker Title="Filtrar por categoria"
+           ItemsSource="{Binding Source=Categorias}"
+       
+        SelectedItem="{Binding Converter=CategoriaSelecionada}" />
         <ListView x:Name="lst_produtos" 
                   IsPullToRefreshEnabled="True"
                   Refreshing="lst_produtos_Refreshing"
@@ -57,6 +61,9 @@
             </ListView.ItemTemplate>
         </ListView>
         </Frame>
+        <Button Text="Relatório por Categoria"
+                Command="{Binding AbrirRelatorioCommand}"
+         />
         
     </StackLayout>
 </ContentPage>
