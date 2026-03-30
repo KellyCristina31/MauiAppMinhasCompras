@@ -1,33 +1,36 @@
 using System.Collections.ObjectModel;
+using MauiAppMinhasCompras.Models;
 
-namespace MauiAppMinhasCompras.Views;
+namespace MauiAppMinhasCompras.ViewModels;
 
+public class RelatorioCategoriasViewModel : BaseViewModel
+{
+    public ObservableCollection<RelatorioCategoria> Relatorio { get; set; }
 
-    public class RelatorioCategoriasViewModel : BaseViewModel
+    public RelatorioCategoriasViewModel()
     {
-        public ObservableCollection<RelatorioCategoria> Relatorio { get; set; }
-
-    public RelatorioCategoriasViewModel() => CarregarRelatorio();
+        CarregarRelatorio();
+    }
 
     private async void CarregarRelatorio()
-        {
-            var produtos = await App.Database.GetProdutosAsync();
-
-            var dados = produtos
-                .GroupBy(p => p.Categoria)
-                .Select(g => new RelatorioCategoria
-                {
-                    Categoria = g.Key,
-                    Total = g.Sum(p => p.Preco * p.Quantidade)
-                });
-
-            Relatorio = new ObservableCollection<RelatorioCategoria>(dados);
-        }
-    }
-
-    public class RelatorioCategoria
     {
-        public string Categoria { get; set; }
-        public double Total { get; set; }
+        var produtos = await App.Db.GetAll();
+
+        var dados = produtos
+            .GroupBy(p => p.Categoria)
+            .Select(g => new RelatorioCategoria
+            {
+                Categoria = g.Key,
+                Total = g.Sum(p => p.Total)
+            });
+
+        Relatorio = new ObservableCollection<RelatorioCategoria>(dados);
+        OnPropertyChanged(nameof(Relatorio));
     }
+}
+
+public class RelatorioCategoria
+{
+    public string Categoria { get; set; }
+    public double Total { get; set; }
 }

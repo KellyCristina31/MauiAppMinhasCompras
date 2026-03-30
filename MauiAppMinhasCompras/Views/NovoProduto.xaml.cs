@@ -9,24 +9,26 @@ public partial class NovoProduto : ContentPage
         InitializeComponent();
     }
 
-    private async void ToolbarItem_Clicked(object sender, EventArgs e)
+    private async void btn_salvar_Clicked(object sender, EventArgs e)
     {
         try
         {
             Produto p = new Produto
             {
                 Descricao = txt_descricao.Text,
-                Quantidade = Convert.ToDouble(txt_quantidade.Text),
-                Preco = Convert.ToDouble(txt_preco.Text)
+                Quantidade = double.Parse(txt_quantidade.Text),
+                Preco = double.Parse(txt_preco.Text),
+                Categoria = picker_categoria.SelectedItem?.ToString()
             };
 
-            await App.Db.Insert(p);
-            await DisplayAlert("Sucesso!", "Registro Inserido", "OK");
+            await App.Db.Save(p);
+
+            await DisplayAlert("OK", "Produto salvo!", "OK");
             await Navigation.PopAsync();
         }
         catch (Exception ex)
         {
-            await DisplayAlert("Ops", ex.Message, "OK");
+            await DisplayAlert("Erro", ex.Message, "OK");
         }
     }
 }
